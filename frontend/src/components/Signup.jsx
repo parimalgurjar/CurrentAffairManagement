@@ -17,7 +17,7 @@ const Signup = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      await axios.post("http://localhost:5000/api/auth/signup", formData);
+      await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/signup`, formData);
       toast.success("Signup successful!");
       setTimeout(() => navigate("/login"), 2000); // delay to let toast show
     } catch (err) {
