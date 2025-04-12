@@ -48,7 +48,7 @@ const AffairList = ({ subject, dateRange, topic }) => {
   const handleDelete = async (id) => {
     const token = localStorage.getItem("token");
     try {
-      await axios.delete(`${process.env.REACT_APP_API_URL}/api/affairs/${id}`, {
+      await axios.delete(`https://cam-backend-i5n7.onrender.com/api/affairs/${id}`, {
         headers: { Authorization: `Bearer ${token}` },
       });
       setAffairs((prev) => prev.filter((item) => item._id !== id));
@@ -139,7 +139,7 @@ const AffairList = ({ subject, dateRange, topic }) => {
 
           {item.photo && (
             <img
-              src={`${process.env.REACT_APP_API_URL}/uploads/${item.photo}`}
+              src={`https://cam-backend-i5n7.onrender.com/uploads/${item.photo}`}
               alt={item.title || "Affair image"}
               style={{
                 maxWidth: "300px",
