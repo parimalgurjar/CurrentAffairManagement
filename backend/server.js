@@ -1,47 +1,46 @@
 const express = require("express");
-const mongoose = require("mongoose");
-const dotenv = require("dotenv");
 const cors = require("cors");
+const dotenv = require("dotenv");
+const bodyParser = require("body-parser");
 const path = require("path");
 
-const affairRoutes = require("./routes/affairRoutes");
-const authRoutes = require("./routes/auth");
-
-dotenv.config();
+dotenv.config(); // Load environment variables from .env file
 
 const app = express();
-const PORT = process.env.PORT || 5000;
 
-// Middleware
+// CORS setup
+const clientURL = process.env.CLIENT_URL || "https://cam-frontend.onrender.com"; // Your frontend URL
+console.log(`CORS allowed for: ${clientURL}`);
+
 app.use(cors({
-  origin: process.env.CLIENT_URL || "http://localhost:3000",
+  origin: clientURL, // Allow only the frontend URL
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"]
+  allowedHeaders: ["Content-Type", "Authorization"],
 }));
 
-app.use(express.json());
-app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+// Body parser middleware
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({ extended: true }));
 
-
-
-// Health check route
-app.get("/", (req, res) => {
-  res.send("🎯 API is running...");
-});
-
-// Routes
-app.use("/api/auth", authRoutes);
+// Your routes (add any other routes you have)
+const affairRoutes = require("./routes/affairRoutes");
 app.use("/api/affairs", affairRoutes);
 
-// MongoDB connection
-mongoose.connect(process.env.MONGO_URI)
-  .then(() => {
-    app.listen(PORT, () => {
-      // Optional: uncomment this if you want a log during local development
-      console.log(`✅ Server running on http://localhost:${PORT}`);
-    });
-  })
-  .catch((err) => {
-    console.error("❌ MongoDB connection failed:", err.message);
-    process.exit(1);
-  });
+// Error handling
+app.use((err, req, res, next) => {
+  if (err instanceof multer.MulterError) {
+    res.status(400).json({ error: `Multer error: ${err.message}` });
+  } else if (err) {
+    res.status(400).json({ error: err.message });
+  } else {
+    next();
+  }
+});
+
+// Ensure static files like images are served properly (if any)
+app.use("/uploads", express.static(path.join(__dirname, "uploads")));
+
+const PORT = process.env.PORT || 5000;
+app.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
+});
