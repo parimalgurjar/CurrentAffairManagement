@@ -9,7 +9,7 @@ dotenv.config(); // Load environment variables from .env file
 const app = express();
 
 // CORS setup
-const clientURL = process.env.CLIENT_URL || "https://cam-frontend.onrender.com"; // Your frontend URL
+const clientURL ="https://cam-frontend.onrender.com"; // Your frontend URL
 console.log(`CORS allowed for: ${clientURL}`);
 
 app.use(cors({
