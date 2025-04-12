@@ -12,7 +12,7 @@ function ArticleDetail() {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const res = await axios.get(`http://localhost:5000/api/affairs/${id}`);
+        const res = await axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/affairs/${id}`);
         setArticle(res.data);
       } catch (err) {
         toast.error("Failed to load article.");
@@ -46,7 +46,7 @@ function ArticleDetail() {
 
           {article.image ? (
             <img
-              src={`http://localhost:5000/uploads/${article.image}`}
+              src={`${process.env.REACT_APP_BACKEND_URL}/uploads/${article.image}`}
               alt={article.title}
               className="mt-4 rounded-md max-w-full"
               onError={(e) => (e.target.style.display = "none")}
