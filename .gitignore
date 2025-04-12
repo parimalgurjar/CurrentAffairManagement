@@ -1,0 +1,26 @@
+# Node modules (frontend & backend)
+node_modules/
+
+# Build output
+frontend/build/
+backend/dist/
+dist/
+build/
+
+# Env files
+.env
+frontend/.env
+backend/.env
+
+# Logs
+*.log
+npm-debug.log*
+
+# System/IDE files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Uploads (optional)
+backend/uploads/

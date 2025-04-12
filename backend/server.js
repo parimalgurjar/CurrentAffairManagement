@@ -1,48 +1,48 @@
 const express = require("express");
-const cors = require("cors");
+const mongoose = require("mongoose");
 const dotenv = require("dotenv");
-const bodyParser = require("body-parser");
+const cors = require("cors");
 const path = require("path");
 
-dotenv.config(); // Load environment variables from .env file
+const affairRoutes = require("./routes/affairRoutes");
+const authRoutes = require("./routes/auth");
+
+dotenv.config();
+
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// CORS setup
-const clientURL = "https://cam-frontend.onrender.com"; // Your frontend URL
-console.log(`CORS allowed for: ${clientURL}`);
-
+// Middleware
 app.use(cors({
-  origin: clientURL, // Allow only the frontend URL
+  origin: "http://localhost:3000",
   methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization"],
-  credentials: true,  // Allow cookies to be sent with requests if necessary
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// Body parser middleware
-app.use(bodyParser.json());
-app.use(bodyParser.urlencoded({ extended: true }));
-
-// Your routes (add any other routes you have)
-const affairRoutes = require("./routes/affairRoutes");
-app.use("/api/affairs", affairRoutes);
-
-// Error handling
-app.use((err, req, res, next) => {
-  if (err instanceof multer.MulterError) {
-    res.status(400).json({ error: `Multer error: ${err.message}` });
-  } else if (err) {
-    res.status(400).json({ error: err.message });
-  } else {
-    next();
-  }
-});
-
-// Ensure static files like images are served properly (if any)
+app.use(express.json());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
-// Starting the server
-const PORT = process.env.PORT || 5000;
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
+// Health check route
+app.get("/", (req, res) => {
+  res.send("🎯 API is running...");
 });
+
+// Routes
+app.use("/api/auth", authRoutes);
+app.use("/api/affairs", affairRoutes);
+
+// MongoDB connection
+mongoose.connect(process.env.MONGO_URI)
+  .then(() => {
+    console.log("✅ Connected to MongoDB");
+    
+
+    app.listen(PORT, () => {
+      console.log(`🚀 Server is running at http://localhost:${PORT}`);
+    });
+  })
+  .catch((err) => {
+    console.error("❌ MongoDB connection failed:", err.message);
+    process.exit(1);
+  });
