@@ -12,7 +12,7 @@ function ArticleDetail() {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/affairs/${id}`);
+        const res = await axios.get(`https://cam-backend-i5n7.onrender.com/api/affairs/${id}`);
         setArticle(res.data);
       } catch (err) {
         toast.error("Failed to load article.");
@@ -46,7 +46,7 @@ function ArticleDetail() {
 
           {article.image ? (
             <img
-              src={`${process.env.REACT_APP_API_URL}/uploads/${article.image}`}
+              src={`https://cam-backend-i5n7.onrender.com/uploads/${article.image}`}
               alt={article.title}
               className="mt-4 rounded-md max-w-full"
               onError={(e) => (e.target.style.display = "none")}

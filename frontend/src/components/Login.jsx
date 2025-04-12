@@ -22,7 +22,7 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const res = await axios.post(`${process.env.REACT_APP_API_URL}/api/auth/login`, formData);
+      const res = await axios.post(`https://cam-backend-i5n7.onrender.com/api/auth/login`, formData);
       login(res.data.token);
       toast.success("Login successful!");
       setTimeout(() => {

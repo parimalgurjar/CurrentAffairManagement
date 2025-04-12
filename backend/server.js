@@ -9,13 +9,14 @@ dotenv.config(); // Load environment variables from .env file
 const app = express();
 
 // CORS setup
-const clientURL ="https://cam-frontend.onrender.com"; // Your frontend URL
+const clientURL = "https://cam-frontend.onrender.com"; // Your frontend URL
 console.log(`CORS allowed for: ${clientURL}`);
 
 app.use(cors({
   origin: clientURL, // Allow only the frontend URL
   methods: ["GET", "POST", "PUT", "DELETE"],
   allowedHeaders: ["Content-Type", "Authorization"],
+  credentials: true,  // Allow cookies to be sent with requests if necessary
 }));
 
 // Body parser middleware
@@ -40,6 +41,7 @@ app.use((err, req, res, next) => {
 // Ensure static files like images are served properly (if any)
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 
+// Starting the server
 const PORT = process.env.PORT || 5000;
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`);

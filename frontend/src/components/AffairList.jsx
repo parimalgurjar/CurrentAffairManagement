@@ -29,7 +29,7 @@ const AffairList = ({ subject, dateRange, topic }) => {
         if (dateRange?.to) params.to = dateRange.to;
         if (topic) params.topic = topic;
 
-        const res = await axios.get(`${process.env.REACT_APP_API_URL}/api/affairs`, {
+        const res = await axios.get(`https://cam-backend-i5n7.onrender.com/api/affairs`, {
           params,
         });
         setAffairs(res.data);

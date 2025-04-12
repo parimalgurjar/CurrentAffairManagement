@@ -58,7 +58,7 @@ const AffairForm = () => {
     const token = localStorage.getItem("token");
 
     try {
-      await axios.post(`${process.env.REACT_APP_API_URL}/api/affairs`, data, {
+      await axios.post(`https://cam-backend-i5n7.onrender.com/api/affairs`, data, {
         headers: {
           Authorization: `Bearer ${token}`,
           "Content-Type": "multipart/form-data",
